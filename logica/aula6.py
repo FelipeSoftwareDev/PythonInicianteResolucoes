@@ -40,6 +40,7 @@ def cadastrar_usuario():
     else:
         print("Senha inválida. Use ao menos 8 caracteres, uma letra maiúscula e um número.")
 
+
 while True:
     print("\n=== MENU ===")
     print("1 - Login")
@@ -56,3 +57,4 @@ while True:
         break
     else:
         print("Opção inválida.")
+
