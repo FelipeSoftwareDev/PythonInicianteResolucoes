@@ -78,27 +78,61 @@ Este é o arquivo que vamos executar. Ele importa os outros dois.
 Crie o arquivo `app/main.py`:
 
 ```python
-import acoes   # Importa nosso arquivo acoes.py
-import crypto  # Importa nosso arquivo crypto.py
 import sys
+import os
+
+# Garante que consiga importar os módulos vizinhos
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+import acoes
+import crypto
 
 def main():
+    print("Bem-vindo ao Sistema Financeiro - Aula 11")
+    
     while True:
-        print("\n1. Ações | 2. Cripto | 0. Sair")
-        opcao = input("Opção: ")
+        print("\nO que você deseja analisar?")
+        print("1. Ações (Stock)")
+        print("2. Criptomoedas (Crypto)")
+        print("0. Sair")
+        
+        opcao = input("Escolha uma opção: ")
         
         if opcao == "1":
-            ticker = input("Ticker (ex: PETR4.SA): ")
+            ticker = input("Digite o ticker da Ação (ex: PETR4.SA, AAPL): ")
             acoes.analisar_acao(ticker)
         elif opcao == "2":
-            ticker = input("Ticker (ex: BTC-USD): ")
+            ticker = input("Digite o ticker da Cripto (ex: BTC-USD, ETH-USD): ")
             crypto.analisar_crypto(ticker)
         elif opcao == "0":
+            print("Saindo...")
             break
+        else:
+            print("Opção inválida, tente novamente.")
 
 if __name__ == "__main__":
     main()
 ```
+
+### Entendendo o "Pulo do Gato" dos Imports 🐈
+
+Você deve ter notado estas linhas no início:
+```python
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+```
+
+**Por que isso é necessário?**
+Quando o Python tenta fazer um `import`, ele procura apenas em pastas específicas. Dependendo de onde você executa o comando `python` (do terminal, do VS Code, de outra pasta), ele pode não "enxergar" os arquivos `acoes.py` e `crypto.py`, mesmo estando lado a lado.
+
+**Passo a Passo Detalhado:**
+
+1.  `__file__`: É uma variável mágica que contém o **caminho do arquivo atual** (o `main.py`). O problema é que as vezes esse caminho é relativo (ex: `./app/main.py`).
+2.  `os.path.abspath(__file__)`: A função `abspath` (Absolute Path) converte isso para o endereço completo no seu computador (ex: `C:\Users\Voce\Projeto\app\main.py`). Isso evita confusão!
+3.  `os.path.dirname(...)`: A função `dirname` (Directory Name) pega o caminho completo e "corta" o nome do arquivo final, sobrando só a pasta (ex: `C:\Users\Voce\Projeto\app`).
+4.  `sys.path`: É uma lista interna do Python com todos os lugares onde ele procura imports.
+5.  `.append(...)`: Adicionamos a nossa pasta `app` nessa lista!
+
+**Resultado:** O Python agora sabe exatamente onde procurar os arquivos vizinhos, não importa de onde você rodou o programa.
 
 ## Como Rodar
 1. Abra o terminal na pasta do projeto.
